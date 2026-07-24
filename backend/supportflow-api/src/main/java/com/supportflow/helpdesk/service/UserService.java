@@ -6,6 +6,8 @@ import com.supportflow.helpdesk.repository.UserRepository;
 import com.supportflow.helpdesk.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -18,6 +20,10 @@ public class UserService {
     public User create(UserRequestDTO dto) {
         User user = UserMapper.toEntity(dto);
         return userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
     
 }

@@ -8,6 +8,8 @@ import com.supportflow.helpdesk.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -23,6 +25,15 @@ public class UserController {
     public UserResponseDTO createUser(@RequestBody UserRequestDTO dto) {
         User user = userService.create(dto);
         return UserMapper.toResponse(user);
+    }
+
+    @GetMapping
+    public List<UserResponseDTO> findAll() {
+        
+        return userService.findAll()
+                .stream()
+                .map(UserMapper::toResponse)
+                .toList();
     }
     
 }
