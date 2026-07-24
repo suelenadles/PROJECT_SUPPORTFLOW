@@ -4,6 +4,7 @@ import com.supportflow.helpdesk.domain.entity.User;
 import com.supportflow.helpdesk.dto.request.UserRequestDTO;
 import com.supportflow.helpdesk.repository.UserRepository;
 import com.supportflow.helpdesk.mapper.UserMapper;
+import com.supportflow.helpdesk.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class UserService {
 
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
     }
 
     public void delete(Long id) {
