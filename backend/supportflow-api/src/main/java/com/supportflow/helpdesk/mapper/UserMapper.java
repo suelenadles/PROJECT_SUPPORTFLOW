@@ -4,6 +4,8 @@ import com.supportflow.helpdesk.domain.entity.User;
 import com.supportflow.helpdesk.dto.request.UserRequestDTO;
 import com.supportflow.helpdesk.dto.response.UserResponseDTO;
 
+import java.time.LocalDateTime;
+
 public class UserMapper {
 
     private UserMapper() {
@@ -17,6 +19,7 @@ public class UserMapper {
         user.setEmail(dto.email());
         user.setPassword(dto.password());
         user.setRole(dto.role());
+        user.setCreatedAt(LocalDateTime.now());
 
         return user;
     }
