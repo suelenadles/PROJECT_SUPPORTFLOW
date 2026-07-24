@@ -111,7 +111,7 @@ ALTA
 URGENTE
 9. Tecnologias
 Backend
-Java 21
+Java 25
 Spring Boot
 Spring Data JPA
 Spring Security

@@ -1,4 +1,4 @@
-package supportflow_api;
+package com.supportflow.helpdesk;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package supportflow_api;
+package com.supportflow.helpdesk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -8,7 +8,7 @@ Criar uma plataforma Help Desk para gerenciamento de atendimentos entre clientes
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - PostgreSQL
 - Docker
