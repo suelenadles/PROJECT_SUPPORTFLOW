@@ -31,11 +31,17 @@ public class Ticket {
     private User requester;
 
     @ManyToOne
+    @JoinColumn(name = "assigned_technician_id")
+    private User assignedTechnician;
+
+    @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
     
+    private LocalDateTime closedAt;
 }
