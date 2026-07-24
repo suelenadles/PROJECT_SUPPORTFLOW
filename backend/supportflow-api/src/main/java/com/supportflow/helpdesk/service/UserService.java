@@ -1,11 +1,10 @@
 package com.supportflow.helpdesk.service;
 
 import com.supportflow.helpdesk.domain.entity.User;
+import com.supportflow.helpdesk.dto.request.UserRequestDTO;
 import com.supportflow.helpdesk.repository.UserRepository;
+import com.supportflow.helpdesk.mapper.UserMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,20 +15,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();}
-    
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    public User save(User user) {
+    public User create(UserRequestDTO dto) {
+        User user = UserMapper.toEntity(dto);
         return userRepository.save(user);
-    }
-
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
     }
     
 }
