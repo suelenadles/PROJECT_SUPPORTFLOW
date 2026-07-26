@@ -19,6 +19,7 @@ public class CategoryMapper {
         category.setName(dto.name());
         category.setDescription(dto.description());
         category.setCreatedAt(LocalDateTime.now());
+        category.setUpdatedAt(LocalDateTime.now());
 
         return category;
     
