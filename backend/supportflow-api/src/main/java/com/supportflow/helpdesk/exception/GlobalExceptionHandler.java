@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -25,18 +26,18 @@ public class GlobalExceptionHandler {
         HttpServletRequest request) 
     {
 
-    String message = exception
-            .getBindingResult()
+    List<String> errors = exception.getBindingResult()
             .getFieldErrors()
-            .get(0)
-            .getDefaultMessage();
+            .stream()
+            .map(field -> field.getDefaultMessage())
+            .toList();
 
-    return new ErrorResponse(
+        return new ErrorResponse(
             LocalDateTime.now(),
             HttpStatus.BAD_REQUEST.value(),
-            message,
-            request.getRequestURI()
-    );
-}
-    
+            "Validation error",
+            request.getRequestURI(),
+            errors
+        );
+    }
 }
