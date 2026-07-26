@@ -12,6 +12,7 @@ import com.supportflow.helpdesk.repository.CategoryRepository;
 import com.supportflow.helpdesk.repository.TicketRepository;
 import com.supportflow.helpdesk.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import com.supportflow.helpdesk.domain.enums.UserRole;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,6 +49,25 @@ public class TicketService {
 
         Ticket savedTicket = ticketRepository.save(ticket);
         return TicketMapper.toResponseDTO(savedTicket);
+    }
+
+    public TicketResponseDTO assignTechnician(Long ticketId, Long technicianId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + ticketId));
+
+        User technician = userRepository.findById(technicianId)
+                .orElseThrow(() -> new ResourceNotFoundException("Technician not found with id: " + technicianId));
+
+        if (technician.getRole() != UserRole.TECHNICIAN) {
+            throw new RuntimeException("User is not a technician");
+        }
+
+        ticket.setAssignedTechnician(technician);
+        ticket.setStatus(TicketStatus.IN_PROGRESS);
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        Ticket updatedTicket = ticketRepository.save(ticket);
+        return TicketMapper.toResponseDTO(updatedTicket);
     }
 
     public List<TicketResponseDTO> findAll() {

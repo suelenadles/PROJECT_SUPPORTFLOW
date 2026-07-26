@@ -19,7 +19,7 @@ public record TicketResponseDTO (
 
     String requester,
 
-    String technican,
+    String technician,
 
     String category,
 

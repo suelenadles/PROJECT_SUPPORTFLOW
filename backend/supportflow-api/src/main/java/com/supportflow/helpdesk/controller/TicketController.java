@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {
@@ -40,5 +41,14 @@ public class TicketController {
     public void delete(@PathVariable Long id) {
         ticketService.delete(id);
     }
+
+    @PutMapping("/{ticketId}/assign/{technicianId}")
+    public TicketResponseDTO assignTechnician(@PathVariable Long ticketId, @PathVariable Long technicianId) {
+
+        return ticketService.assignTechnician(ticketId, technicianId);
+
+    }
+        
+        
     
 }
