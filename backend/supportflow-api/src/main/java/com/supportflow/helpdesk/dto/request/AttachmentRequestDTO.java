@@ -8,11 +8,11 @@ public record AttachmentRequestDTO(
         @NotBlank(message = "File name is required")
         String fileName,
 
-        @NotBlank(message = "File type is required")
-        String fileType,
+        @NotBlank(message = "File path is required")
+        String filePath,
 
-        @NotBlank(message = "File url is required")
-        String fileUrl,
+        @NotBlank(message = "Content type is required")
+        String contentType,
 
         @NotNull(message = "Ticket id is required")
         Long ticketId

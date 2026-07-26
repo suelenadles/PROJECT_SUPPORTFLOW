@@ -80,6 +80,10 @@ public class Attachment {
         return createdAt;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+}
+
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }

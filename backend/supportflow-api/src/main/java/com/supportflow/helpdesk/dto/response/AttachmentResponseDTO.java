@@ -6,8 +6,8 @@ public record AttachmentResponseDTO(
 
         Long id,
         String fileName,
-        String fileType,
-        String fileUrl,
+        String filePath,
+        String contentType,
         LocalDateTime createdAt
 
 ) {
