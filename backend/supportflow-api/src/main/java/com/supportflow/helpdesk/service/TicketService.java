@@ -12,8 +12,8 @@ import com.supportflow.helpdesk.repository.CategoryRepository;
 import com.supportflow.helpdesk.repository.TicketRepository;
 import com.supportflow.helpdesk.repository.UserRepository;
 import com.supportflow.helpdesk.dto.request.UpdateTicketStatusDTO;
-import com.supportflow.helpdesk.exception.InvalidTicketStatusExcepition;
-import com.supportflow.helpdesk.exception.ResourceNotFoundException;
+import com.supportflow.helpdesk.exception.InvalidTicketStatusException;
+import com.supportflow.helpdesk.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import com.supportflow.helpdesk.domain.enums.UserRole;
 
@@ -62,7 +62,7 @@ public class TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("Technician not found with id: " + technicianId));
 
         if (technician.getRole() != UserRole.TECHNICIAN) {
-            throw new RuntimeException("User is not a technician");
+            throw new BusinessException("User is not a technician");
         }
 
         ticket.setAssignedTechnician(technician);
@@ -108,15 +108,15 @@ public class TicketService {
 
     private void validateStatusTransition(TicketStatus currentStatus, TicketStatus newStatus) {
         if (currentStatus == TicketStatus.CLOSED) {
-            throw new InvalidTicketStatusExcepition("Closed tickets cannot be changed.");
+            throw new InvalidTicketStatusException("Closed tickets cannot be changed.");
         }
 
         if (currentStatus == TicketStatus.OPEN && newStatus == TicketStatus.CLOSED) {
-            throw new InvalidTicketStatusExcepition("Cannot close an open ticket without assigning a technician.");
+            throw new InvalidTicketStatusException("Cannot close an open ticket without assigning a technician.");
         }
 
         if (currentStatus == TicketStatus.IN_PROGRESS && newStatus == TicketStatus.OPEN) {
-            throw new InvalidTicketStatusExcepition("Ticket must be in progress before closing.");
+            throw new InvalidTicketStatusException("Ticket must be in progress before closing.");
         }
     }
 
