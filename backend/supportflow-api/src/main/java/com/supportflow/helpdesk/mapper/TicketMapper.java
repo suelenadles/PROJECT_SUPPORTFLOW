@@ -31,7 +31,8 @@ public class TicketMapper {
                 ticket.getRequester().getName(),
                 ticket.getAssignedTechnician() != null ? ticket.getAssignedTechnician().getName() : null,
                 ticket.getCategory().getName(),
-                ticket.getCreatedAt()
+                ticket.getCreatedAt(),
+                ticket.getClosedAt()
         );
     }
     

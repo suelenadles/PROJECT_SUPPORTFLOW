@@ -23,7 +23,9 @@ public record TicketResponseDTO (
 
     String category,
 
-    LocalDateTime createdAt
+    LocalDateTime createdAt,
+
+    LocalDateTime closedAt
 
 ) {
     
