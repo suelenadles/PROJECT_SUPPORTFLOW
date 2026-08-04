@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
@@ -25,5 +27,12 @@ public class CommentController {
             @Valid @RequestBody CommentRequestDTO dto
     ) {
         return commentService.create(dto);
+    }
+
+    @GetMapping("/ticket/{ticketId}")
+    public List<CommentResponseDTO> findByTicketId(
+            @PathVariable Long ticketId
+    ) {
+        return commentService.findByTicketId(ticketId);
     }
 }

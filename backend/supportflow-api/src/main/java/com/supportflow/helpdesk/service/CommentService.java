@@ -13,6 +13,7 @@ import com.supportflow.helpdesk.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -61,5 +62,18 @@ public class CommentService {
 
 
         return CommentMapper.toResponseDTO(savedComment);
+    }
+
+    public List<CommentResponseDTO> findByTicketId(Long ticketId) {
+
+        ticketRepository.findById(ticketId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Ticket not found"
+                        ));
+        return commentRepository.findByTicketId(ticketId)
+                .stream()
+                .map(CommentMapper::toResponseDTO)
+                .toList();
     }
 }
