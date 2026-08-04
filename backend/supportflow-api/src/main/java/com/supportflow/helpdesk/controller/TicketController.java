@@ -3,6 +3,7 @@ package com.supportflow.helpdesk.controller;
 import com.supportflow.helpdesk.dto.request.TicketRequestDTO;
 import com.supportflow.helpdesk.dto.response.TicketResponseDTO;
 import com.supportflow.helpdesk.service.TicketService;
+import com.supportflow.helpdesk.dto.request.UpdateTicketStatusDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,13 @@ public class TicketController {
         return ticketService.assignTechnician(ticketId, technicianId);
 
     }
-        
-        
+
+    @PatchMapping("/{id}/status")
+    public TicketResponseDTO updateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateTicketStatusDTO dto
+    ) {
+        return ticketService.updateStatus(id, dto);
+    }     
     
 }

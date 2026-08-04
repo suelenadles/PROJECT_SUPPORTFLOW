@@ -11,6 +11,7 @@ import com.supportflow.helpdesk.mapper.TicketMapper;
 import com.supportflow.helpdesk.repository.CategoryRepository;
 import com.supportflow.helpdesk.repository.TicketRepository;
 import com.supportflow.helpdesk.repository.UserRepository;
+import com.supportflow.helpdesk.dto.request.UpdateTicketStatusDTO;
 import org.springframework.stereotype.Service;
 import com.supportflow.helpdesk.domain.enums.UserRole;
 
@@ -80,6 +81,25 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
         return TicketMapper.toResponseDTO(ticket);
+    }
+
+    public TicketResponseDTO updateStatus(
+        Long ticketId,
+        UpdateTicketStatusDTO dto
+    ) {
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + ticketId));
+
+        ticket.setStatus(dto.status());
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        if (dto.status() == TicketStatus.CLOSED) {
+            ticket.setClosedAt(LocalDateTime.now());
+        }
+
+        Ticket updatedTicket = ticketRepository.save(ticket);
+        return TicketMapper.toResponseDTO(updatedTicket);
     }
 
     public void delete(Long id) {
