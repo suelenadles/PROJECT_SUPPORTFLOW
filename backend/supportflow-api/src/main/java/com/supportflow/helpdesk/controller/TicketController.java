@@ -27,20 +27,20 @@ public class TicketController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public TicketResponseDTO createTicket(@Valid @RequestBody TicketRequestDTO dto) {
         return ticketService.create(dto);
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'CLIENT')")
     public List<TicketResponseDTO> findAll() {
         return ticketService.findAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'CLIENT')")
     public TicketResponseDTO findById(@PathVariable Long id) {
         return ticketService.findById(id);
     }

@@ -112,11 +112,12 @@ public class TicketService {
         }
 
         if (currentStatus == TicketStatus.OPEN && newStatus == TicketStatus.CLOSED) {
-            throw new InvalidTicketStatusException("Cannot close an open ticket without assigning a technician.");
+            throw new InvalidTicketStatusException("Cannot close an open ticket.");
         }
 
         if (currentStatus == TicketStatus.IN_PROGRESS && newStatus == TicketStatus.OPEN) {
-            throw new InvalidTicketStatusException("Ticket must be in progress before closing.");
+            throw new InvalidTicketStatusException(
+            "A ticket in progress cannot return to open.");
         }
     }
 
