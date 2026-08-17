@@ -74,5 +74,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(
+                AccessDeniedException ex,
+                HttpServletRequest request
+        ) {
+            Map<String, Object> body = new HashMap<>();
+
+            body.put("timestamp", LocalDateTime.now());
+            body.put("status", HttpStatus.FORBIDDEN.value());
+            body.put("error", "Access denied");
+            body.put("message", ex.getMessage());
+            body.put("path", request.getRequestURI());
+
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(body);
+        }
+
 
 }

@@ -36,14 +36,14 @@ public class TicketController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'CLIENT')")
-    public List<TicketResponseDTO> findAll() {
-        return ticketService.findAll();
+    public List<TicketResponseDTO> findAll(Authentication authentication) {
+        return ticketService.findAll(authentication.getName());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'CLIENT')")
-    public TicketResponseDTO findById(@PathVariable Long id) {
-        return ticketService.findById(id);
+    public TicketResponseDTO findById(@PathVariable Long id, Authentication authentication) {
+        return ticketService.findById(id, authentication.getName());
     }
 
     @DeleteMapping("/{id}")

@@ -13,6 +13,7 @@ import com.supportflow.helpdesk.repository.TicketRepository;
 import com.supportflow.helpdesk.repository.UserRepository;
 import com.supportflow.helpdesk.dto.request.UpdateTicketStatusDTO;
 import com.supportflow.helpdesk.exception.InvalidTicketStatusException;
+import com.supportflow.helpdesk.exception.AccessDeniedException;
 import com.supportflow.helpdesk.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import com.supportflow.helpdesk.domain.enums.UserRole;
@@ -73,17 +74,71 @@ public class TicketService {
         return TicketMapper.toResponseDTO(updatedTicket);
     }
 
-    public List<TicketResponseDTO> findAll() {
-        return ticketRepository.findAll().stream()
-                .map(TicketMapper::toResponseDTO)
-                .toList();
+    public List<TicketResponseDTO> findAll(String email) {
+
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "User not found with email: " + email
+            ));
+
+        List<Ticket> tickets;
+
+        if (user.getRole() == UserRole.ADMIN) {
+        tickets = ticketRepository.findAll();
+
+        } else if (user.getRole() == UserRole.TECHNICIAN) {
+        tickets = ticketRepository.findByAssignedTechnicianId(user.getId());
+
+        } else {
+        tickets = ticketRepository.findByRequesterId(user.getId());
+        }
+
+        return tickets.stream()
+            .map(TicketMapper::toResponseDTO)
+            .toList();
     }
     
-    public TicketResponseDTO findById(Long id) {
-        Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
+   public TicketResponseDTO findById(Long id, String email) {
+
+    Ticket ticket = ticketRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "Ticket not found with id: " + id
+            ));
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "User not found with email: " + email
+            ));
+
+    if (user.getRole() == UserRole.ADMIN) {
         return TicketMapper.toResponseDTO(ticket);
     }
+
+    if (user.getRole() == UserRole.TECHNICIAN) {
+
+        if (ticket.getAssignedTechnician() == null ||
+                !ticket.getAssignedTechnician().getId().equals(user.getId())) {
+
+            throw new AccessDeniedException(
+                    "You do not have access to this ticket."
+            );
+        }
+    }
+
+    // CLIENT só pode visualizar os próprios tickets
+    if (user.getRole() == UserRole.CLIENT) {
+
+        if (!ticket.getRequester().getId().equals(user.getId())) {
+
+            throw new AccessDeniedException(
+                    "You do not have access to this ticket."
+            );
+        }
+    }
+
+    return TicketMapper.toResponseDTO(ticket);
+}
+
 
     public TicketResponseDTO updateStatus(
         Long ticketId,
