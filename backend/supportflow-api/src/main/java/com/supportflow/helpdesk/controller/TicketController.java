@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 
 
 
@@ -27,10 +28,10 @@ public class TicketController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('CLIENT', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'ADMIN', 'TECHNICIAN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public TicketResponseDTO createTicket(@Valid @RequestBody TicketRequestDTO dto) {
-        return ticketService.create(dto);
+    public TicketResponseDTO createTicket(@Valid @RequestBody TicketRequestDTO dto, Authentication authentication) {
+        return ticketService.create(dto, authentication.getName());
     }
 
     @GetMapping

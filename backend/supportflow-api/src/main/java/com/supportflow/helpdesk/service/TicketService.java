@@ -33,10 +33,10 @@ public class TicketService {
         this.categoryRepository = categoryRepository;
     }
 
-    public TicketResponseDTO create(TicketRequestDTO dto) {
+    public TicketResponseDTO create(TicketRequestDTO dto, String email) {
         
-        User requester = userRepository.findById(dto.requesterId())
-                .orElseThrow(() -> new ResourceNotFoundException("Requester not found with id: " + dto.requesterId()));
+        User requester = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Requester not found with email: " + email));
         
         Category category = categoryRepository.findById(dto.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + dto.categoryId()));       
