@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 
 
@@ -26,28 +27,33 @@ public class TicketController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('CLIENT')")
     @ResponseStatus(HttpStatus.CREATED)
     public TicketResponseDTO createTicket(@Valid @RequestBody TicketRequestDTO dto) {
         return ticketService.create(dto);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN')")
     public List<TicketResponseDTO> findAll() {
         return ticketService.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN')")
     public TicketResponseDTO findById(@PathVariable Long id) {
         return ticketService.findById(id);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         ticketService.delete(id);
     }
 
     @PutMapping("/{ticketId}/assign/{technicianId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public TicketResponseDTO assignTechnician(@PathVariable Long ticketId, @PathVariable Long technicianId) {
 
         return ticketService.assignTechnician(ticketId, technicianId);
@@ -55,6 +61,7 @@ public class TicketController {
     }
 
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN')")
     public TicketResponseDTO updateStatus(
             @PathVariable Long id,
             @RequestBody UpdateTicketStatusDTO dto
